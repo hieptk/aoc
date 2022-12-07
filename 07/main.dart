@@ -26,15 +26,12 @@ void addChild(Node p, String childName, {int size: 0}) {
 
 void part1(Node p) {
   p.children.values.forEach((child) => part1(child));
-  if (p.size == 0 && p.totalSize <= 100000) {
+  if (p.totalSize <= 100000) {
     res += p.totalSize;
   }
 }
 
 void part2(Node p, int minSize) {
-  if (p.size > 0) {
-    return;
-  }
   res2 = min(res2, p.totalSize);
   p.children.values.forEach((child) {
     if (child.totalSize >= minSize) {
@@ -59,7 +56,7 @@ void main(List<String> arguments) {
         cur = cur.children[tokens[2]]!;
       }
     } else if (tokens[0] != '\$' && tokens[0] != 'dir') {
-      addChild(cur, tokens[1], size: int.parse(tokens[0]));
+      cur.size += int.parse(tokens[0]);
     }
   }
 
