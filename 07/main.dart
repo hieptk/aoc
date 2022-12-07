@@ -14,13 +14,12 @@ class Directory {
   late int totalSize = children.values.fold<int>(size, (int sum, Directory child) => sum + child.totalSize);
 }
 
-void addChild(Directory p, String childName, {int size: 0}) {
+void addChild(Directory p, String childName) {
   if (p.children.containsKey(childName)) {
     return;
   }
   Directory child = Directory();
   child.parent = p;
-  child.size = size;
   p.children[childName] = child;
 }
 
