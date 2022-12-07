@@ -7,31 +7,31 @@ const int REQUIRED_SIZE = 30000000;
 int res = 0;
 int res2 = 0;
 
-class Node {
+class Directory {
   int size = 0;
-  Map<String, Node> children = {};
-  Node? parent = null;
-  late int totalSize = children.values.fold<int>(size, (int sum, Node child) => sum + child.totalSize);
+  Map<String, Directory> children = {};
+  Directory? parent = null;
+  late int totalSize = children.values.fold<int>(size, (int sum, Directory child) => sum + child.totalSize);
 }
 
-void addChild(Node p, String childName, {int size: 0}) {
+void addChild(Directory p, String childName, {int size: 0}) {
   if (p.children.containsKey(childName)) {
     return;
   }
-  Node child = Node();
+  Directory child = Directory();
   child.parent = p;
   child.size = size;
   p.children[childName] = child;
 }
 
-void part1(Node p) {
+void part1(Directory p) {
   p.children.values.forEach((child) => part1(child));
   if (p.totalSize <= 100000) {
     res += p.totalSize;
   }
 }
 
-void part2(Node p, int minSize) {
+void part2(Directory p, int minSize) {
   res2 = min(res2, p.totalSize);
   p.children.values.forEach((child) {
     if (child.totalSize >= minSize) {
@@ -42,8 +42,8 @@ void part2(Node p, int minSize) {
 
 void main(List<String> arguments) {
   File file = File('input.txt');
-  Node root = Node();
-  Node cur = root;
+  Directory root = Directory();
+  Directory cur = root;
   for (String line in file.readAsLinesSync()) {
     List<String> tokens = line.split(' ');
     if (tokens[0] == '\$' && tokens[1] == 'cd') {
