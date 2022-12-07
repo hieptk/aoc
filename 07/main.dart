@@ -49,7 +49,7 @@ void main(List<String> arguments) {
   Node cur = root;
   for (String line in file.readAsLinesSync()) {
     List<String> tokens = line.split(' ');
-    if (tokens[1] == 'cd') {
+    if (tokens[0] == '\$' && tokens[1] == 'cd') {
       if (tokens[2] == '..') {
         cur = cur.parent!;
       } else if (tokens[2] == '/') {
@@ -58,10 +58,8 @@ void main(List<String> arguments) {
         addChild(cur, tokens[2]);
         cur = cur.children[tokens[2]]!;
       }
-    } else if (tokens[1] != 'ls') {
-        if (tokens[0] != 'dir') { // don't need to care about dirs we don't go into
-          addChild(cur, tokens[1], size: int.parse(tokens[0]));
-        }
+    } else if (tokens[0] != '\$' && tokens[0] != 'dir') {
+      addChild(cur, tokens[1], size: int.parse(tokens[0]));
     }
   }
 
