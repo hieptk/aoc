@@ -71,6 +71,7 @@ void main(List<String> arguments) {
           addChild(cur, tokens[1], size: int.parse(tokens[0]));
         }
       }
+      j = i;
     }
   }
 
