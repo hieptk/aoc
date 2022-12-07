@@ -11,38 +11,25 @@ class Directory {
   int size = 0;
   Map<String, Directory> children = {};
   Directory? parent = null;
-  late int totalSize = children.values.fold<int>(size, (int sum, Directory child) => sum + child.totalSize);
+  late int totalSize = children.values
+      .fold<int>(size, (int sum, Directory child) => sum + child.totalSize);
 }
 
-void addChild(Directory p, String childName) {
+void addChild(Directory p, String childName, List<Directory> allDirs) {
   if (p.children.containsKey(childName)) {
     return;
   }
   Directory child = Directory();
   child.parent = p;
   p.children[childName] = child;
-}
-
-void part1(Directory p) {
-  p.children.values.forEach((child) => part1(child));
-  if (p.totalSize <= 100000) {
-    res += p.totalSize;
-  }
-}
-
-void part2(Directory p, int minSize) {
-  res2 = min(res2, p.totalSize);
-  p.children.values.forEach((child) {
-    if (child.totalSize >= minSize) {
-      part2(child, minSize);
-    }
-  });
+  allDirs.add(child);
 }
 
 void main(List<String> arguments) {
   File file = File('input.txt');
   Directory root = Directory();
   Directory cur = root;
+  List<Directory> allDirs = [root];
   for (String line in file.readAsLinesSync()) {
     List<String> tokens = line.split(' ');
     if (tokens[0] == '\$' && tokens[1] == 'cd') {
@@ -51,7 +38,7 @@ void main(List<String> arguments) {
       } else if (tokens[2] == '/') {
         cur = root;
       } else {
-        addChild(cur, tokens[2]);
+        addChild(cur, tokens[2], allDirs);
         cur = cur.children[tokens[2]]!;
       }
     } else if (tokens[0] != '\$' && tokens[0] != 'dir') {
@@ -59,10 +46,12 @@ void main(List<String> arguments) {
     }
   }
 
-  part1(root);
-  print(res);
+  print(allDirs
+      .where((dir) => dir.totalSize <= 100000)
+      .fold<int>(0, (sum, dir) => sum + dir.totalSize));
 
-  res2 = root.totalSize;
-  part2(root, REQUIRED_SIZE - (FS_SIZE - root.totalSize));
-  print(res2);
+  int minSize = REQUIRED_SIZE - (FS_SIZE - root.totalSize);
+  print(allDirs
+      .where((dir) => dir.totalSize >= minSize)
+      .fold<int>(root.totalSize, (res, dir) => min(res, dir.totalSize)));
 }
