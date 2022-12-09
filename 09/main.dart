@@ -1,48 +1,35 @@
 import 'dart:io';
+import 'dart:math';
 
-class Coord {
-  int x;
-  int y;
+class Coord extends Point<int> {
+  Coord(int x, int y) : super(x, y);
 
-  @override
-  bool operator==(Object other) {
-    return other is Coord && other.x == x && other.y == y;
+  Coord moveDir(Coord dir) {
+    return Coord(x + dir.x, y + dir.y);
   }
 
-  @override
-  int get hashCode {
-    return 0;
-  }
-
-  Coord(this.x, this.y);
-
-  int sqDist(Coord other) {
-    return (x - other.x) * (x - other.x) + (y - other.y) * (y - other.y);
-  }
-
-  void moveTowards(Coord other) {
+  Coord moveTowards(Coord other) {
     int dx = other.x - x;
     int dy = other.y - y;
-    x += dx != 0 ? dx ~/ dx.abs() : 0;
-    y += dy != 0 ? dy ~/ dy.abs() : 0;
+    return Coord(
+        x + (dx != 0 ? dx ~/ dx.abs() : 0), y + (dy != 0 ? dy ~/ dy.abs() : 0));
   }
 }
 
 class Rope {
   List<Coord> knots;
 
-  Rope(this.knots);
+  Rope(int n): this.knots = List.generate(n, (_) => Coord(0, 0));
 
   Coord tail() {
     return knots.last;
   }
 
   void move(Coord dir) {
-    knots.first.x += dir.x;
-    knots.first.y += dir.y;
+    knots.first = knots.first.moveDir(dir);
     for (int i = 1; i < knots.length; ++i) {
-      if (knots[i].sqDist(knots[i - 1]) > 2) {
-        knots[i].moveTowards(knots[i - 1]);
+      if (knots[i].squaredDistanceTo(knots[i - 1]) > 2) {
+        knots[i] = knots[i].moveTowards(knots[i - 1]);
       }
     }
   }
@@ -59,10 +46,10 @@ void main(List<String> arguments) {
   };
 
   // part 1
-  // Rope rope = Rope(List.generate(2, (_) => Coord(0, 0)));
+  // Rope rope = Rope(2);
 
   // part 2
-  Rope rope = Rope(List.generate(10, (_) => Coord(0, 0)));
+  Rope rope = Rope(10);
 
   Set<Coord> visited = {Coord(0, 0)};
 
