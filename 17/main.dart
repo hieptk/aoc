@@ -3,18 +3,18 @@ import 'dart:math';
 
 final int n = 1000000000000;
 
-List<List<List<String>>> pieces = [
-  ['####'.split('')],
-  ['.#.'.split(''), '###'.split(''), '.#.'.split('')],
-  ['..#'.split(''), '..#'.split(''), '###'.split('')],
-  ['#'.split(''), '#'.split(''), '#'.split(''), '#'.split('')],
-  ['##'.split(''), '##'.split('')],
+List<List<String>> pieces = [
+  ['####'],
+  ['.#.', '###', '.#.'],
+  ['..#', '..#', '###'],
+  ['#', '#', '#', '#'],
+  ['##', '##'],
 ];
 
 List<List<String>> res = [];
 late List<List<Point<int>>> seen;
 
-bool checkMove(int x, int y, int dx, int dy, List<List<String>> p) {
+bool checkMove(int x, int y, int dx, int dy, List<String> p) {
   if (x + dx < 0 || x + p[0].length - 1 + dx >= res[0].length || y + dy < 0) {
     return false;
   }
@@ -49,7 +49,7 @@ void main(List<String> arguments) {
 
   for (int i = 0; i < n; ++i) {
     int x = 2, y = h + 4;
-    List<List<String>> p = pieces[i % pieces.length];
+    List<String> p = pieces[i % pieces.length];
     while (res.length < y + p.length) {
       res.add('.......'.split(''));
     }
