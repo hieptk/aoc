@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:dartx/dartx.dart';
-
 final bool part1 = true;
 final int N_ROUNDS = part1 ? 10 : inf;
 final List<int> dx = [-1, -1, -1, 0, 0, 1, 1, 1];
@@ -43,7 +41,7 @@ void main(List<String> arguments) {
           int d = dirGroups[j][1];
           Point<int> pro = Point(p.x + dx[d], p.y + dy[d]);
           proposal[p] = pro;
-          cnt[pro] = cnt.getOrElse(pro, () => 0) + 1;
+          cnt[pro] = (cnt[pro] ?? 0) + 1;
           break;
         }
       }
