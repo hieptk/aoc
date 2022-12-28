@@ -1,5 +1,4 @@
 import scala.io.Source
-import scala.util.matching.Regex
 
 object Day04:
   private val PART1 = false
