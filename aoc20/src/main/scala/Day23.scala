@@ -5,8 +5,8 @@ object Day23:
   private class Node(val value: Int, var next: Node)
 
   @tailrec
-  private def move(cur: Node, steps: Int, value2Pos: Vector[Node], n: Int): Vector[Node] =
-    if steps == 0 then value2Pos
+  private def move(cur: Node, steps: Int, value2Pos: Vector[Node], n: Int): Node =
+    if steps == 0 then value2Pos(1)
     else
       val next = cur.next
       val next2 = next.next
@@ -33,10 +33,10 @@ object Day23:
     val value2Pos: Vector[Node] = Vector.tabulate(input.length + 1)(i => Node(i, null))
     input.indices.foreach(i => value2Pos(input(i)).next = value2Pos(input((i + 1) % input.length)))
     val res = move(value2Pos(input.head), 100, value2Pos, input.length)
-    doPrint(res(1).next)
+    doPrint(res.next)
 
-    val input2 = "394618527".split("").map(_.toInt).toVector ++ Vector.range(10, 1000001)
+    val input2 = input ++ Vector.range(10, 1000001)
     val value2Pos2: Vector[Node] = Vector.tabulate(input2.length + 1)(i => Node(i, null))
     input2.indices.foreach(i => value2Pos2(input2(i)).next = value2Pos2(input2((i + 1) % input2.length)))
     val res2 = move(value2Pos2(input2.head), 10000000, value2Pos2, input2.length)
-    println(res2(1).next.value.toLong * res2(1).next.next.value)
+    println(res2.next.value.toLong * res2.next.next.value)
