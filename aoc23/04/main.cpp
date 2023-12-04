@@ -32,6 +32,15 @@ unordered_set<int> readWinning(stringstream &ss) {
     return winning;
 }
 
+int readGuesses(stringstream &ss, unordered_set<int> &winning) {
+    int cnt = 0;
+    int guess;
+    while (ss >> guess) {
+        cnt += winning.count(guess);
+    }
+    return cnt;
+}
+
 int main() {
     #ifdef LOCAL
     freopen("input.txt", "r", stdin);
@@ -49,11 +58,8 @@ int main() {
         res2 += numberOfCopies[idnum] + 1;
 
         auto winning = readWinning(ss);
-        int cnt = 0;
-        int guess;
-        while (ss >> guess) {
-            cnt += winning.count(guess);
-        }
+        int cnt = readGuesses(ss, winning);
+        
         res += (cnt > 0 ? (1 << (cnt - 1)) : 0);
 
         for (int i = 1; i <= cnt; ++i) {
