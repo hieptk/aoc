@@ -51,8 +51,8 @@ int tryit(string &a, int i) {
     if (i == 5) return getRank(a);
     if (a[i] != 'J') return tryit(a, i + 1);
     int res = -1;
-    for (char c: cards2) {
-        a[i] = c;
+    for (int j = 1; j < cards2.length(); ++j) {
+        a[i] = cards2[j];
         res = max(res, tryit(a, i + 1));
     }
     a[i] = 'J';
