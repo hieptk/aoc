@@ -69,7 +69,7 @@ int main() {
     ll res = 0;
     for (auto &p: q) {
         ll tmp = f2(p);
-        res = (res == 0 ? tmp : res / gcd(res, tmp) * tmp);
+        res = (res == 0 ? tmp : lcm(res, tmp));
     }
     cout << res << "\n";
 }
