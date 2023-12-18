@@ -36,11 +36,6 @@ ll area(vector<pair<ll, ll>>& fig) {
     return abs(res) / 2;
 }
 
-int val(int c) {
-    if (isdigit(c)) return c - '0';
-    return c - 'a' + 10;
-}
-
 int main() {
     #ifdef LOCAL
     freopen("input.txt", "r", stdin);
