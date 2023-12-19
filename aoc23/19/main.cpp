@@ -53,42 +53,15 @@ vector<Rule> parseRule(istringstream &ss) {
     return res;
 }
 
-bool check(map<char, ll> &vals, Rule &r) {
-    if (r.var == '*') return 1;
-    if (r.smaller) {
-        return vals[r.var] < r.val;
-    } else {
-        return vals[r.var] > r.val;
-    }
-}
-
-string check(map<char, ll> &vals, vector<Rule> &rules) {
-    for (Rule &r: rules) {
-        if (check(vals, r)) return r.forward;
-    }
-    return "?";
-}
-
-bool check(map<char, ll> &vals) {
-    string name = "in";
-    while (1) {
-        string tmp = check(vals, a[name]);
-        if (tmp == "A") return 1;
-        if (tmp == "R") return 0;
-        name = tmp;
-    }
-    return 0;
-}
-
 bool updateBounds(map<char, pair<ll, ll>> &bounds, Rule &r) {
     if (r.var == '*') return 1;
     if (r.smaller) {
         if (bounds[r.var].fi >= r.val) return 0;
-        bounds[r.var].se = r.val - 1;
+        bounds[r.var].se = min(bounds[r.var].se, r.val - 1);
         return 1;
     } else {
         if (bounds[r.var].se <= r.val) return 0;
-        bounds[r.var].fi = r.val + 1;
+        bounds[r.var].fi = max(bounds[r.var].fi, r.val + 1);
         return 1;
     }
 }
@@ -97,11 +70,11 @@ bool updateBoundsInv(map<char, pair<ll, ll>> &bounds, Rule &r) {
     if (r.var == '*') return 0;
     if (r.smaller) {
         if (bounds[r.var].se < r.val) return 0;
-        bounds[r.var].fi = r.val;
+        bounds[r.var].fi = max(bounds[r.var].fi, r.val);
         return 1;
     } else {
         if (bounds[r.var].fi > r.val) return 0;
-        bounds[r.var].se = r.val;
+        bounds[r.var].se = min(bounds[r.var].se, r.val);
         return 1;
     }
 }
@@ -132,15 +105,15 @@ ll part1() {
     while (getline(cin, line)) {
         istringstream ss(line);
         string token;
-        map<char, ll> vals;
+        map<char, pair<ll, ll>> bounds;
         ll sum = 0;
         for (int i = 0; i < 4; ++i) {
             ss >> token;
             ll val = stoll(token.substr(2));
             sum += val;
-            vals[token[0]] = val;
+            bounds[token[0]] = {val, val};
         }
-        if (check(vals)) res += sum;
+        if (dfs("in", bounds)) res += sum;
     }
     return res;
 }
